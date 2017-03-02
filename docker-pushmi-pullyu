@@ -83,8 +83,13 @@ registry_port=5000
 registry_host="localhost"
 
 echo "Running a registry at $registry_host:$registry_port..."
+docker volume create docker-pushmi-pullyu
 registry_container_name=$(
-  docker run --detach --publish="$registry_port:$registry_port" registry:2
+  docker run \
+    --detach \
+    --volume="docker-pushmi-pullyu:/var/lib/registry" \
+    --publish="$registry_port:$registry_port" \
+    registry:2.6
 )
 
 echo "Pushing $image_name to $registry_host:$registry_port..."
